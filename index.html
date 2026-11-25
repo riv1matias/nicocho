@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Custom Sal de Asador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: almacén gourmet de barrio, cálido y confiable, con el orgullo de la marca
+   IDEA: la revista-catálogo de Custom hecha tienda: noche azul estrellada, frascos, etiquetas de color por categoría
+   PICTURE: frascos reales del catálogo en tarjetas inclinadas sobre la noche, con el sello del logo detrás
+   COLOUR and TYPE: azul noche de la marca, dorado del botón PEDIR, un color por categoría; Playfair Display + DM Sans
+   LAYOUT: hero de marca, promo, categorías, ofertas, cómo comprar; tienda con filtros, carrito lateral, cuenta y seguimiento */
+:root{color-scheme:light dark;
+--night:#21243d;--night2:#2b2f4f;--gold:#e9b44c;--gold2:#f3cd7a;--red:#c8553d;--wa:#1fa855;
+--bg:light-dark(#f6f6f9,#14162a);--card:light-dark(#fff,#1f2238);--ink:light-dark(#1d1f33,#eceaf4);--mute:light-dark(#5d6078,#a5a7bf);--line:light-dark(#e3e3ec,#323553);--soft:light-dark(#eef0f6,#262a45)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "DM Sans",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.08;margin:0;text-wrap:balance}
+h2{font-size:clamp(28px,4vw,40px)}
+a{color:inherit}
+button,input,select,textarea{font:inherit;font-size:16px}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(36px,5vw,72px) max(5vw,16px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;border:0;font-weight:700;text-decoration:none;white-space:nowrap}
+.gold{background:var(--gold);color:#21243d}.gold:hover{background:var(--gold2)}
+.wa{background:var(--wa);color:#fff}
+.ghost{background:transparent;color:inherit;border:1.5px solid currentColor}
+.dark{background:var(--night);color:#fff}
+.mute{color:var(--mute)}
+.small{font-size:14px}
+.hide{display:none!important}
+/* header */
+header{position:sticky;top:0;z-index:30;background:var(--night);color:#fff;box-shadow:0 2px 14px #0003}
+.hd{display:flex;align-items:center;gap:18px;padding:10px max(4vw,14px);max-width:1300px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{width:46px;height:40px;object-fit:contain}
+.brand b{font:900 22px/1 "Playfair Display",serif;letter-spacing:.5px}
+.brand i{display:block;font:700 italic 13px/1.1 "Playfair Display",serif;color:var(--gold)}
+nav.top{display:flex;gap:4px;margin-left:auto}
+nav.top a{padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:500;color:#d8d9e8}
+nav.top a.on,nav.top a:hover{background:#ffffff14;color:#fff}
+.cartbtn{position:relative;background:var(--gold);color:#21243d;border:0;border-radius:999px;min-height:44px;padding:0 16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.cartbtn em{font-style:normal;background:#21243d;color:var(--gold);border-radius:99px;min-width:24px;height:24px;display:grid;place-items:center;font-size:13px;padding:0 6px}
+.tabs{display:none}
+@media(max-width:820px){nav.top{display:none}.cartbtn{margin-left:auto}
+ .tabs{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--night);padding:6px 6px max(6px,env(safe-area-inset-bottom))}
+ .tabs a{color:#c9cbe0;text-decoration:none;font-size:13px;text-align:center;padding:6px 0;border-radius:12px;display:grid;justify-items:center;gap:2px}
+ .tabs a.on{color:var(--gold);background:#ffffff10}
+ .tabs svg{width:22px;height:22px}
+ body{padding-bottom:72px}}
+/* hero */
+.hero{background:var(--night) radial-gradient(circle at 80% 20%,#3a3f6a 0,transparent 55%);color:#fff;position:relative;overflow:hidden}
+.stars{position:absolute;inset:0;background-image:radial-gradient(#ffffff30 1px,transparent 1.5px),radial-gradient(#e9b44c40 1px,transparent 1.5px);background-size:46px 46px,83px 83px;background-position:0 0,20px 30px;pointer-events:none}
+.stripes{display:flex;height:6px}.stripes span{flex:1}
+.hgrid{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
+.hero h1{font-size:clamp(64px,11vw,132px);font-weight:900;letter-spacing:1px;line-height:.95}
+.hero h1 i{display:block;font-size:.38em;color:var(--gold);letter-spacing:0;margin-top:6px}
+.hero .rule{width:120px;height:2px;background:#fff;margin:22px 0 16px;opacity:.8}
+.hero p.lead{font:italic 700 clamp(18px,2vw,22px)/1.4 "Playfair Display",serif;color:#e5e4f0;max-width:30ch;margin:0 0 26px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.stats{display:flex;gap:28px;margin-top:30px;flex-wrap:wrap}
+.stats b{display:block;font:900 32px/1 "Playfair Display",serif;color:var(--gold)}
+.stats span{font-size:13px;color:#bfc1d6}
+.shelf{position:relative;height:clamp(340px,40vw,460px)}
+.seal{position:absolute;inset:6% 8%;background:url(img/logo.png) center/contain no-repeat;opacity:.09}
+.jar{position:absolute;width:clamp(120px,15vw,170px);background:#fff;border-radius:18px;padding:10px 10px 12px;box-shadow:0 18px 40px #0007,0 2px 0 #ffffff20 inset;color:#21243d;text-align:center;font-weight:700;font-size:13px;line-height:1.25}
+.jar img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block;margin-bottom:8px}
+.jar:nth-child(2){left:0;top:6%;rotate:-8deg}
+.jar:nth-child(3){left:36%;top:0;rotate:3deg;z-index:2}
+.jar:nth-child(4){right:2%;top:24%;rotate:9deg}
+.jar:nth-child(5){left:12%;bottom:0;rotate:-3deg;z-index:3}
+.jar:nth-child(6){right:12%;bottom:2%;rotate:6deg}
+.tag{position:absolute;z-index:4;right:4%;top:0;background:var(--red);color:#fff;border-radius:999px;padding:10px 16px;font-weight:700;rotate:6deg;box-shadow:0 8px 20px #0005}
+@media(max-width:760px){.hgrid{grid-template-columns:1fr}.shelf{height:330px;margin-top:8px}.jar{width:118px}.jar:nth-child(6){display:none}}
+/* promo */
+.promo{background:var(--gold);color:#21243d;padding:16px max(5vw,16px);text-align:center;font-weight:700}
+.promo span{font-weight:400}
+/* sections */
+.head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.head p{margin:6px 0 0;color:var(--mute)}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.cat{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;text-decoration:none;transition:transform .15s}
+.cat:hover{transform:translateY(-3px)}
+.cat img{width:64px;height:64px;border-radius:14px;object-fit:cover;outline:3px solid var(--c);outline-offset:-3px}
+.cat b{display:block;line-height:1.2}
+.cat small{color:var(--mute);font-size:13px}
+.cat small em{font-style:normal;color:var(--c);font-weight:700}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,230px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
+.rail>*{scroll-snap-align:start}
+.railnav{display:flex;gap:8px}
+.railnav button{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:20px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;counter-reset:s}
+.step{background:#ffffff0d;border:1px solid #ffffff1f;border-radius:20px;padding:22px}
+.step h3{font-size:22px;margin:12px 0 6px;color:var(--gold)}
+.step p{margin:0;color:#d4d5e6}
+.step svg{width:40px;height:40px;color:var(--gold)}
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 18px}
+.faq summary{cursor:pointer;font-weight:700;padding:12px 0;min-height:44px}
+.faq p{margin:0 0 14px;color:var(--mute)}
+/* products */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+@media(max-width:460px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.pc .ph{background:#fff;aspect-ratio:1;display:grid;place-items:center;border-bottom:4px solid var(--c)}
+.pc .ph img{width:86%;height:86%;object-fit:contain}
+.pc .bd{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.pc .nm{font-weight:700;font-size:15px;line-height:1.25}
+.pc .ct{font-size:13px;color:var(--c);font-weight:700}
+.price{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:auto}
+.price b{font:900 22px/1 "Playfair Display",serif;white-space:nowrap}
+.price s{color:var(--mute);font-size:14px;white-space:nowrap}
+.price small{color:var(--mute);font-size:13px;width:100%}
+.off{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-weight:700;font-size:13px;border-radius:99px;padding:3px 10px}
+.add{min-height:44px;border-radius:12px;border:0;background:var(--night);color:#fff;font-weight:700;margin-top:8px}
+:root[data-theme=dark] .add{background:var(--gold);color:#21243d}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .add{background:var(--gold);color:#21243d}}
+.qty{display:flex;align-items:center;justify-content:space-between;border:1.5px solid var(--line);border-radius:12px;margin-top:8px;min-height:44px}
+.qty button{width:44px;height:42px;border:0;background:none;color:var(--ink);font-size:20px;font-weight:700}
+.qty span{font-weight:700}
+.tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-bottom:14px}
+.inp{width:100%;min-height:46px;border:1.5px solid var(--line);border-radius:12px;padding:0 14px;background:var(--card);color:var(--ink)}
+textarea.inp{padding:12px 14px;min-height:80px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;position:sticky;top:64px;z-index:5;background:var(--bg)}
+.chips button{flex:none;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:500}
+.chips button.on{background:var(--night);color:#fff;border-color:var(--night)}
+:root[data-theme=dark] .chips button.on{background:var(--gold);color:#21243d}
+.empty{text-align:center;padding:40px;color:var(--mute)}
+/* drawer */
+.scrim{position:fixed;inset:0;background:#0008;z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);z-index:41;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:var(--night);color:#fff}
+.dh h3{font-size:24px}
+.x{width:44px;height:44px;border-radius:50%;border:0;background:#ffffff1a;color:#fff;font-size:22px}
+.lines{flex:1;overflow:auto;padding:12px 16px;display:grid;gap:10px;align-content:start}
+.ln{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.ln img{width:56px;height:56px;object-fit:contain;background:#fff;border-radius:10px}
+.ln .nm{font-weight:700;font-size:14px;line-height:1.25}
+.ln .qty{margin:4px 0 0;min-height:36px;width:120px}.ln .qty button{height:34px;width:36px}
+.ln b{white-space:nowrap}
+.df{padding:16px;border-top:1px solid var(--line);display:grid;gap:10px}
+.tot{display:flex;justify-content:space-between;font-size:18px}.tot b{font:900 26px/1 "Playfair Display",serif}
+.note{background:light-dark(#fdf3dc,#3a3320);border:1px solid var(--gold);border-radius:12px;padding:10px 12px;font-size:14px}
+/* forms, panels */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,28px)}
+.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.form{display:grid;gap:14px}
+.form label{display:grid;gap:6px;font-weight:500;font-size:15px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.row2{grid-template-columns:1fr}}
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.seg label{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px;cursor:pointer;font-weight:500}
+.seg label:has(input:checked){border-color:var(--gold);background:light-dark(#fdf3dc,#3a3320)}
+.seg input{accent-color:var(--night);width:18px;height:18px}
+.err{color:var(--red);font-size:14px;min-height:1em}
+.sum{display:grid;gap:8px;font-size:15px}
+.sum div{display:flex;justify-content:space-between;gap:10px}
+.sum div span:last-child{white-space:nowrap}
+.order{border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px;background:var(--card)}
+.ohd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.ohd b{font-size:18px}
+.pill{border-radius:99px;padding:4px 12px;font-size:13px;font-weight:700;background:var(--soft)}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap}
+.thumbs img{width:44px;height:44px;border-radius:10px;object-fit:contain;background:#fff;border:1px solid var(--line)}
+.track{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;position:relative}
+.track div{text-align:center;font-size:13px;line-height:1.2;overflow-wrap:anywhere;color:var(--mute);display:grid;justify-items:center;gap:6px}
+.track i{width:28px;height:28px;border-radius:50%;background:var(--soft);border:2px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:13px;font-weight:700;position:relative;z-index:1}
+.track div.done{color:var(--ink);font-weight:500}
+.track div.done i{background:var(--wa);border-color:var(--wa);color:#fff}
+.track div.cur i{background:var(--gold);border-color:var(--gold);color:#21243d;box-shadow:0 0 0 6px #e9b44c40}
+.track:before{content:"";position:absolute;left:10%;right:10%;top:13px;height:2px;background:var(--line)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts .btn{min-height:44px;padding:0 16px;font-size:15px}
+.ok{display:grid;justify-items:center;text-align:center;gap:12px}
+.ok .code{font:900 34px/1 "Playfair Display",serif;color:var(--gold);background:var(--night);padding:12px 20px;border-radius:14px}
+.toast{position:fixed;left:50%;bottom:90px;translate:-50% 20px;background:var(--night);color:#fff;padding:12px 18px;border-radius:12px;opacity:0;transition:.25s;z-index:60;pointer-events:none;box-shadow:0 10px 30px #0005}
+.toast.show{opacity:1;translate:-50% 0}
+footer{background:var(--night);color:#c9cbe0}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
+footer h4{color:#fff;margin:0 0 10px;font-family:"Playfair Display",serif;font-size:20px}
+footer a{display:block;padding:4px 0;color:#c9cbe0}
+.demo{font-size:13px;color:var(--mute);margin-top:10px}
+select.inp{appearance:auto}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <div class="stripes" id="stripes"></div>
+ <div class="hd">
+  <a class="brand" href="#inicio"><img src="img/logo.png" alt=""><span><b>CUSTOM</b><i>Sal de Asador</i></span></a>
+  <nav class="top" id="topnav">
+   <a href="#inicio">Inicio</a><a href="#tienda">Tienda</a><a href="#seguimiento">Seguir mi pedido</a><a href="#cuenta" id="navacc">Ingresar</a>
+  </nav>
+  <button class="cartbtn" id="cartBtn" aria-label="Abrir carrito"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><span class="hide-sm">Carrito</span><em id="cartCount">0</em></button>
+ </div>
+</header>
+
+<main>
+<!-- INICIO -->
+<section id="v-inicio" class="view">
+ <div class="hero"><div class="stars"></div>
+  <div class="band"><div class="wrap hgrid">
+   <div>
+    <p class="small" style="color:var(--gold);font-weight:700;margin:0 0 8px">Catálogo de productos · Noviembre 2026</p>
+    <h1>CUSTOM<i>Sal de Asador</i></h1>
+    <div class="rule"></div>
+    <p class="lead">Creadores de frascos de sales gourmet, condimentos, hierbas, frutos secos y mucho más.</p>
+    <div class="ctas">
+     <a class="btn gold" href="#tienda">Hacer mi pedido</a>
+     <a class="btn wa" id="waHero" href="#">Escribir por WhatsApp</a>
+    </div>
+    <div class="stats"><div><b id="stCats">12</b><span>categorías</span></div><div><b id="stProds">114</b><span>productos</span></div><div><b>Hasta 25%</b><span>off este mes</span></div></div>
+   </div>
+   <div class="shelf" id="shelf"><div class="seal"></div></div>
+  </div></div>
+ </div>
+ <div class="promo">Comprando 10 Sales Gourmet, te llevás una a elección sin cargo <span>(excepto Sal del Himalaya)</span></div>
+
+ <div class="band"><div class="wrap">
+  <div class="head"><div><h2>Elegí una categoría</h2><p>Tocá una para ver sus productos en la tienda.</p></div><a class="btn ghost" href="#tienda">Ver todo</a></div>
+  <div class="cats" id="cats"></div>
+ </div></div>
+
+ <div class="band" style="padding-top:0"><div class="wrap">
+  <div class="head"><div><h2>Ofertas del mes</h2><p>Los precios tachados son el valor anterior al descuento.</p></div>
+   <div class="railnav"><button id="rPrev" aria-label="Anterior">‹</button><button id="rNext" aria-label="Siguiente">›</button></div></div>
+  <div class="rail" id="rail"></div>
+ </div></div>
+
+ <div class="band dark" style="background:var(--night)"><div class="wrap">
+  <div class="head"><div><h2>Cómo comprar</h2><p style="color:#bfc1d6">Simple, como siempre, pero ordenado.</p></div></div>
+  <div class="steps">
+   <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg><h3>Armá tu pedido</h3><p>Elegí productos y cantidades en la tienda. Si tenés cuenta, repetís tu último pedido en un toque.</p></div>
+   <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12a8 8 0 1 1-3.5-6.6L20 4l-1 3.6A8 8 0 0 1 20 12z"/><path d="M9 10c0 3 2 5 5 5"/></svg><h3>Confirmamos por WhatsApp</h3><p>Te llega el resumen con número de pedido. Coordinamos variedades, pago y día de entrega.</p></div>
+   <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg><h3>Seguí tu envío</h3><p>Con tu código ves en qué etapa está: confirmado, preparando, en camino o entregado.</p></div>
+  </div>
+ </div></div>
+
+ <div class="band"><div class="wrap">
+  <div class="head"><div><h2>Preguntas frecuentes</h2></div></div>
+  <div class="faq">
+   <details><summary>¿Los precios están actualizados?</summary><p>Son los precios en pesos de la tienda online vigentes al 03/11/2026. Están sujetos a cambios y disponibilidad; te confirmamos el total final por WhatsApp.</p></details>
+   <details><summary>¿Qué significa «Desde»?</summary><p>Es el precio de la presentación más económica. Al confirmar el pedido te consultamos tamaño o variedad.</p></details>
+   <details><summary>¿Cómo pago?</summary><p>Transferencia, efectivo al recibir o link de pago. Lo elegís al cerrar el pedido.</p></details>
+   <details><summary>¿Necesito cuenta para comprar?</summary><p>No. Con una cuenta guardás tus datos de entrega, ves tu historial y repetís pedidos sin volver a armarlos.</p></details>
+  </div>
+ </div></div>
+</section>
+
+<!-- TIENDA -->
+<section id="v-tienda" class="view hide"><div class="band"><div class="wrap">
+ <div class="head"><div><h2>Tienda</h2><p id="shopInfo">Precios en pesos argentinos, vigentes al 03/11/2026.</p></div></div>
+ <div class="tools">
+  <input class="inp" id="q" type="search" placeholder="Buscar: nueces, chimichurri, sal ahumada…" aria-label="Buscar productos">
+  <select class="inp" id="sort" aria-label="Ordenar"><option value="cat">Por categoría</option><option value="asc">Menor precio</option><option value="desc">Mayor precio</option><option value="off">Ofertas primero</option></select>
+ </div>
+ <div class="chips" id="chips"></div>
+ <div class="grid" id="grid"></div>
+</div></div></section>
+
+<!-- CHECKOUT -->
+<section id="v-checkout" class="view hide"><div class="band"><div class="wrap">
+ <div class="head"><div><h2>Finalizar pedido</h2><p id="coHint">Completá tus datos y te confirmamos por WhatsApp.</p></div></div>
+ <div class="two">
+  <form class="panel form" id="coForm" novalidate>
+   <div class="row2"><label>Nombre y apellido<input class="inp" id="cName" autocomplete="name" required></label>
+   <label>WhatsApp<input class="inp" id="cPhone" type="tel" inputmode="tel" placeholder="11 2345-6789" autocomplete="tel" required></label></div>
+   <div><div style="font-weight:500;margin-bottom:6px">Entrega</div>
+    <div class="seg"><label><input type="radio" name="ship" value="Envío a domicilio" checked> Envío a domicilio</label><label><input type="radio" name="ship" value="Retiro coordinado"> Retiro coordinado</label></div></div>
+   <div id="addrBox" class="row2"><label>Dirección<input class="inp" id="cAddr" autocomplete="street-address"></label><label>Localidad<input class="inp" id="cCity" autocomplete="address-level2"></label></div>
+   <div><div style="font-weight:500;margin-bottom:6px">Pago</div>
+    <div class="seg"><label><input type="radio" name="pay" value="Transferencia" checked> Transferencia</label><label><input type="radio" name="pay" value="Efectivo"> Efectivo</label><label><input type="radio" name="pay" value="Link de pago"> Link de pago</label></div></div>
+   <label>Notas (variedad, tamaño, sal de regalo, horario)<textarea class="inp" id="cNote"></textarea></label>
+   <p class="err" id="coErr"></p>
+   <button class="btn gold" type="submit">Confirmar pedido</button>
+  </form>
+  <div class="panel"><h3 style="font-size:24px;margin-bottom:14px">Tu pedido</h3><div class="sum" id="coSum"></div></div>
+ </div>
+</div></div></section>
+
+<!-- CONFIRMADO -->
+<section id="v-listo" class="view hide"><div class="band"><div class="wrap" style="max-width:640px">
+ <div class="panel ok" id="okBox"></div>
+</div></div></section>
+
+<!-- CUENTA -->
+<section id="v-cuenta" class="view hide"><div class="band"><div class="wrap">
+ <div id="authBox" class="two">
+  <div class="panel">
+   <div class="seg" style="margin-bottom:18px"><label><input type="radio" name="am" value="in" checked> Ingresar</label><label><input type="radio" name="am" value="up"> Crear cuenta</label></div>
+   <form class="form" id="authForm" novalidate>
+    <label class="upOnly hide">Nombre y apellido<input class="inp" id="aName" autocomplete="name"></label>
+    <label class="upOnly hide">WhatsApp<input class="inp" id="aPhone" type="tel" autocomplete="tel"></label>
+    <label>Email<input class="inp" id="aMail" type="email" autocomplete="email"></label>
+    <label>Contraseña<input class="inp" id="aPass" type="password" autocomplete="current-password"></label>
+    <p class="err" id="aErr"></p>
+    <button class="btn gold" type="submit" id="aBtn">Ingresar</button>
+   </form>
+  </div>
+  <div class="panel" style="background:var(--night);color:#fff;border:0">
+   <h2 style="font-size:32px">Tu cuenta Custom</h2>
+   <p style="color:#d4d5e6">Guardá tu dirección, mirá todos tus pedidos y repetilos con un toque. Ideal para la compra de todos los meses.</p>
+   <button class="btn ghost" id="demoBtn" style="color:var(--gold)">Probar con una cuenta de ejemplo</button>
+   <p class="small" style="color:#9fa2bd">Crea un cliente de muestra con dos pedidos para ver el historial.</p>
+  </div>
+ </div>
+ <div id="accBox" class="hide">
+  <div class="head"><div><h2 id="hello">Hola</h2><p id="accMail"></p></div><button class="btn ghost" id="logout">Cerrar sesión</button></div>
+  <div class="two">
+   <div><h3 style="font-size:26px;margin-bottom:12px">Mis pedidos</h3><div id="myOrders" style="display:grid;gap:14px"></div></div>
+   <form class="panel form" id="profForm"><h3 style="font-size:24px">Datos de entrega</h3>
+    <label>Nombre<input class="inp" id="pName"></label><label>WhatsApp<input class="inp" id="pPhone" type="tel"></label>
+    <label>Dirección<input class="inp" id="pAddr"></label><label>Localidad<input class="inp" id="pCity"></label>
+    <button class="btn gold" type="submit">Guardar</button></form>
+  </div>
+ </div>
+</div></div></section>
+
+<!-- SEGUIMIENTO -->
+<section id="v-seguimiento" class="view hide"><div class="band"><div class="wrap" style="max-width:760px">
+ <div class="head"><div><h2>Seguí tu pedido</h2><p>Ingresá el código que te llegó al confirmar (por ejemplo CS-1042).</p></div></div>
+ <form class="tools" id="trkForm"><input class="inp" id="trkQ" placeholder="CS-0000" aria-label="Código de pedido"><button class="btn gold">Buscar</button></form>
+ <div id="trkOut"></div>
+</div></div></section>
+
+<!-- PANEL -->
+<section id="v-panel" class="view hide"><div class="band"><div class="wrap">
+ <div class="head"><div><h2>Panel del distribuidor</h2><p>Cambiá el estado de cada pedido; el cliente lo ve en su historial y en el seguimiento.</p></div></div>
+ <div id="adm" style="display:grid;gap:14px"></div>
+ <p class="demo">Vista de demostración: en esta versión los pedidos quedan guardados solo en este navegador.</p>
+</div></div></section>
+</main>
+
+<footer><div class="band"><div class="wrap fgrid">
+ <div><a class="brand" href="#inicio"><img src="img/logo.png" alt=""><span><b>CUSTOM</b><i>Sal de Asador</i></span></a><p class="small" style="margin-top:12px">Sales gourmet, condimentos, hierbas, frutos secos y mucho más.</p></div>
+ <div><h4>Contacto</h4><a id="waFoot" href="#">WhatsApp +54 9 11 3399-2025</a><span class="small">Distribuidor Nicolás</span><a href="https://www.instagram.com/customsaldeasador/">Instagram @customsaldeasador</a></div>
+ <div><h4>Comprar</h4><a href="#tienda">Tienda</a><a href="#seguimiento">Seguir mi pedido</a><a href="#cuenta">Mi cuenta</a><a href="#panel">Panel del distribuidor</a></div>
+ <div><h4>Precios</h4><p class="small">En pesos argentinos (ARS), vigentes al 03/11/2026 según la tienda online. Sujetos a cambios y disponibilidad.</p></div>
+</div></div></footer>
+
+<nav class="tabs" id="tabs">
+ <a href="#inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/></svg>Inicio</a>
+ <a href="#tienda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16l-1 13H5zM8 7a4 4 0 0 1 8 0"/></svg>Tienda</a>
+ <a href="#seguimiento"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>Envíos</a>
+ <a href="#cuenta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Cuenta</a>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Carrito">
+ <div class="dh"><h3>Tu carrito</h3><button class="x" id="closeCart" aria-label="Cerrar">×</button></div>
+ <div class="lines" id="lines"></div>
+ <div class="df" id="df"></div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+{
+const DATA={"cats": [["01", "Sales Gourmet"], ["02", "Salados - Paquetes 1 Kg"], ["03", "Regionales"], ["04", "Potes 100 gr Fraccionados"], ["05", "Confitería y Cereales - Bolsones 1 Kg"], ["06", "Frutos Secos y Semillas - Paquetes 1 Kg"], ["07", "Salsas y Preparados"], ["08", "Molinillos y recargas"], ["09", "Condimentos"], ["10", "Hierbas"], ["11", "Bolsa para Horno"], ["12", "Seleccionados"]], "products": [{"name": "¡¡ Combo Surtidos !!", "cat": "01", "price": 23178.0, "old": null, "desde": true, "off": "15%", "img": "img/p2_00.jpg"}, {"name": "Sal Gourmet para Asado", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_01.jpg"}, {"name": "Sal Gourmet para Pollo y Pescado", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_02.jpg"}, {"name": "Sal Gourmet para Tuco", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_03.jpg"}, {"name": "Sal del Himalaya", "cat": "01", "price": 3808.0, "old": null, "desde": false, "off": null, "img": "img/p2_04.jpg"}, {"name": "Sal Ahumada", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_05.jpg"}, {"name": "Sal Gourmet para Cerdo", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_06.jpg"}, {"name": "Sal Gourmet para Ensaladas", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_07.jpg"}, {"name": "Sal Gourmet Picante", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_08.jpg"}, {"name": "Sal Gourmet para Salmuera", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_09.jpg"}, {"name": "Sal con Ajo", "cat": "01", "price": 3176.0, "old": null, "desde": false, "off": null, "img": "img/p2_10.jpg"}, {"name": "MIX Salado Cervecero - 1 Kg", "cat": "02", "price": 13300.0, "old": null, "desde": true, "off": "8%", "img": "img/p2_11.jpg"}, {"name": "Mani Japones varios sabores - 1Kg", "cat": "02", "price": 8736.0, "old": null, "desde": true, "off": "12%", "img": "img/p2_12.jpg"}, {"name": "Maiz Frito / Maiz Canchita - 1 Kg", "cat": "02", "price": 18600.0, "old": null, "desde": false, "off": null, "img": "img/p2_13.jpg"}, {"name": "Mani CON o SIN Sal", "cat": "02", "price": 5837.0, "old": null, "desde": true, "off": null, "img": "img/p2_14.jpg"}, {"name": "Mani en Vainas - 1 Kg", "cat": "02", "price": 7600.0, "old": null, "desde": false, "off": null, "img": "img/p2_15.jpg"}, {"name": "Sal Marina 500 gr", "cat": "02", "price": 3230.0, "old": null, "desde": true, "off": "9%", "img": "img/p2_16.jpg"}, {"name": "Aceite de Oliva 250cc - Custom - Envase de vidrio", "cat": "03", "price": 4864.0, "old": null, "desde": true, "off": "14%", "img": "img/p2_17.jpg"}, {"name": "Aceite de Oliva 500cc - Custom - Envase de vidrio", "cat": "03", "price": 7457.0, "old": null, "desde": true, "off": "10%", "img": "img/p2_18.jpg"}, {"name": "Provoleta sellada al vacío - 150 gr NETO", "cat": "03", "price": 5907.0, "old": null, "desde": true, "off": "17%", "img": "img/p2_19.jpg"}, {"name": "Miel pura 500 gr", "cat": "03", "price": 4782.0, "old": null, "desde": true, "off": "15%", "img": "img/p2_20.jpg"}, {"name": "Miel pura 1 kg", "cat": "03", "price": 7600.0, "old": null, "desde": true, "off": "10%", "img": "img/p2_21.jpg"}, {"name": "Miel liquida frasco 250 cc", "cat": "03", "price": 2766.0, "old": null, "desde": false, "off": null, "img": "img/p2_22.jpg"}, {"name": "Ciruela sin Carozo 100 Gr - Envase Plástico", "cat": "04", "price": 2990.0, "old": null, "desde": false, "off": null, "img": "img/p3_00.jpg"}, {"name": "Avena Instantanea 100 gr - Envase plástico", "cat": "04", "price": 1062.0, "old": null, "desde": false, "off": null, "img": "img/p3_01.jpg"}, {"name": "Granola 100 gr - Envase plástico", "cat": "04", "price": 1512.0, "old": null, "desde": false, "off": null, "img": "img/p3_02.jpg"}, {"name": "Mix Cervecero 100 gr - Envase plástico", "cat": "04", "price": 2438.0, "old": null, "desde": false, "off": null, "img": "img/p3_03.jpg"}, {"name": "Nueces 100 gr - Envase plástico", "cat": "04", "price": 5597.0, "old": null, "desde": false, "off": null, "img": "img/p3_04.jpg"}, {"name": "Almendra 100 gr - Envase plástico", "cat": "04", "price": 5890.0, "old": null, "desde": false, "off": null, "img": "img/p3_05.jpg"}, {"name": "Garrapiñada 100 gr - Envase plástico", "cat": "04", "price": 1512.0, "old": null, "desde": false, "off": null, "img": "img/p3_06.jpg"}, {"name": "Tomate Seco 50 gr - Envase Plástico", "cat": "04", "price": 2052.0, "old": null, "desde": false, "off": null, "img": "img/p3_07.jpg"}, {"name": "Mix Banana 100 gr - Envase plástico", "cat": "04", "price": 2607.0, "old": null, "desde": false, "off": null, "img": "img/p3_08.jpg"}, {"name": "Pasas de Uva Jumbo 100 gr - Envase Plástico", "cat": "04", "price": 3160.0, "old": null, "desde": false, "off": null, "img": "img/p3_09.jpg"}, {"name": "Mix Semillas 100 gr - Envase plástico", "cat": "04", "price": 1512.0, "old": null, "desde": false, "off": null, "img": "img/p3_10.jpg"}, {"name": "Chips Choco Blanco/Negro 100 gr - Envase Plástico", "cat": "04", "price": 4025.0, "old": null, "desde": true, "off": null, "img": "img/p3_11.jpg"}, {"name": "Mix Premium 100 gr - Envase plástico", "cat": "04", "price": 4437.0, "old": null, "desde": false, "off": null, "img": "img/p3_12.jpg"}, {"name": "Rocklets 100 gr - Envase Plástico", "cat": "04", "price": 4970.0, "old": null, "desde": false, "off": null, "img": "img/p3_13.jpg"}, {"name": "Pasas de Uva bañadas c/ chocolate - 1 Kg", "cat": "05", "price": 34765.0, "old": 42560.0, "desde": false, "off": "18%", "img": "img/p3_14.jpg"}, {"name": "Almohaditas Rellenas - 1Kg", "cat": "05", "price": 11640.0, "old": null, "desde": true, "off": null, "img": "img/p3_15.jpg"}, {"name": "Tutucas - Bolsones 1 Kg / 6 Kg", "cat": "05", "price": 7296.0, "old": null, "desde": true, "off": "25%", "img": "img/p3_16.jpg"}, {"name": "Almendras bañadas c/ Chocolate 1kg", "cat": "05", "price": 37350.0, "old": 39200.0, "desde": false, "off": "5%", "img": "img/p3_17.jpg"}, {"name": "Mani bañado c/ CHOCOLATE 1kg", "cat": "05", "price": 21709.99, "old": 23246.0, "desde": false, "off": "7%", "img": "img/p3_18.jpg"}, {"name": "Garrapiñada - 1 Kg", "cat": "05", "price": 5940.0, "old": null, "desde": false, "off": null, "img": "img/p3_19.jpg"}, {"name": "Cereales/Copos de Maiz - 1 Kg", "cat": "05", "price": 7114.0, "old": null, "desde": true, "off": null, "img": "img/p3_20.jpg"}, {"name": "Bolitas de Chocolate - 1 Kg", "cat": "05", "price": 10579.0, "old": null, "desde": false, "off": null, "img": "img/p3_21.jpg"}, {"name": "Avena Instantanea - 1 Kg", "cat": "05", "price": 4057.0, "old": null, "desde": false, "off": null, "img": "img/p3_22.jpg"}, {"name": "Granola - 1 Kg", "cat": "05", "price": 7258.0, "old": null, "desde": false, "off": null, "img": "img/p3_23.jpg"}, {"name": "Aritos de Fruta - 1Kg", "cat": "05", "price": 9520.0, "old": null, "desde": false, "off": null, "img": "img/p3_24.jpg"}, {"name": "Chips Choco semi amargo - 1 Kg", "cat": "05", "price": 18200.0, "old": null, "desde": false, "off": null, "img": "img/p3_25.jpg"}, {"name": "Chips de Choco Blanco - 1Kg", "cat": "05", "price": 18200.0, "old": null, "desde": false, "off": null, "img": "img/p4_00.jpg"}, {"name": "Confites de Chocolate - 1Kg", "cat": "05", "price": 25285.0, "old": null, "desde": false, "off": null, "img": "img/p4_01.jpg"}, {"name": "Confites de Chocolate - 1Kg", "cat": "05", "price": 29860.0, "old": 31060.0, "desde": false, "off": "4%", "img": "img/p4_02.jpg"}, {"name": "Puflitos (1kg)", "cat": "05", "price": 7436.0, "old": null, "desde": false, "off": null, "img": "img/p4_03.jpg"}, {"name": "Cacao Amargo (1kg)", "cat": "05", "price": 23700.0, "old": null, "desde": false, "off": null, "img": "img/p4_04.jpg"}, {"name": "Azucar Impalpable - 1 Kg", "cat": "05", "price": 4013.0, "old": null, "desde": false, "off": null, "img": "img/p4_05.jpg"}, {"name": "Arroz Inflado (1kg)", "cat": "05", "price": 11309.0, "old": null, "desde": false, "off": null, "img": "img/p4_06.jpg"}, {"name": "Bicarbonato (1kg)", "cat": "05", "price": 8755.0, "old": null, "desde": false, "off": null, "img": "img/p4_07.jpg"}, {"name": "Escencia de Vainilla - 100cc", "cat": "05", "price": 2113.0, "old": null, "desde": false, "off": null, "img": "img/p4_08.jpg"}, {"name": "Almendras 1 kg", "cat": "06", "price": 26449.0, "old": null, "desde": false, "off": null, "img": "img/p4_09.jpg"}, {"name": "Nueces - 1kg", "cat": "06", "price": 20499.0, "old": null, "desde": false, "off": null, "img": "img/p4_10.jpg"}, {"name": "Pasas de Uva Jumbo - 1kg", "cat": "06", "price": 13529.0, "old": null, "desde": true, "off": "6%", "img": "img/p4_11.jpg"}, {"name": "Tomate Seco - 1 kg", "cat": "06", "price": 20290.0, "old": 24626.0, "desde": false, "off": "18%", "img": "img/p4_12.jpg"}, {"name": "Ciruela sin Carozo - 1 kg", "cat": "06", "price": 11732.0, "old": null, "desde": false, "off": null, "img": "img/p4_13.jpg"}, {"name": "Ciruela Presidente - 1kg", "cat": "06", "price": 16686.0, "old": 18686.0, "desde": false, "off": "11%", "img": "img/p4_14.jpg"}, {"name": "Mix frutos secos c/ Banana - 1kg", "cat": "06", "price": 12250.0, "old": null, "desde": false, "off": null, "img": "img/p4_15.jpg"}, {"name": "Bolson de Chia - 1 kg - Semilla/Molida", "cat": "06", "price": 15735.0, "old": null, "desde": true, "off": null, "img": "img/p4_16.jpg"}, {"name": "Mix de Semillas - 1kg", "cat": "06", "price": 4582.0, "old": null, "desde": false, "off": null, "img": "img/p4_17.jpg"}, {"name": "Coco Rallado - 1kg", "cat": "06", "price": 9360.0, "old": null, "desde": false, "off": null, "img": "img/p4_18.jpg"}, {"name": "Mix Frutos Secos Premium 1kg", "cat": "06", "price": 19856.0, "old": 25536.0, "desde": false, "off": "22%", "img": "img/p4_19.jpg"}, {"name": "Coco en Escamas", "cat": "06", "price": 35640.0, "old": null, "desde": false, "off": null, "img": "img/p4_20.jpg"}, {"name": "Chimichurri Suave CUSTOM", "cat": "07", "price": 3756.0, "old": null, "desde": false, "off": null, "img": "img/p4_21.jpg"}, {"name": "Chimichurri Picante CUSTOM", "cat": "07", "price": 3756.0, "old": null, "desde": false, "off": null, "img": "img/p4_22.jpg"}, {"name": "Salsas Picantes \"Mande\" 170cc", "cat": "07", "price": 7198.0, "old": null, "desde": true, "off": null, "img": "img/p4_23.jpg"}, {"name": "Mermelada con Jalapeño \"Mande\"", "cat": "07", "price": 9000.0, "old": null, "desde": false, "off": null, "img": "img/p4_24.jpg"}, {"name": "Molinillos", "cat": "08", "price": 6512.0, "old": null, "desde": true, "off": null, "img": "img/p5_00.jpg"}, {"name": "Recargas para Molinillos", "cat": "08", "price": 2520.0, "old": null, "desde": true, "off": null, "img": "img/p5_01.jpg"}, {"name": "Pimentón Dulce", "cat": "09", "price": 1340.0, "old": null, "desde": true, "off": "9%", "img": "img/p5_02.jpg"}, {"name": "Orégano", "cat": "09", "price": 951.0, "old": null, "desde": true, "off": "15%", "img": "img/p5_03.jpg"}, {"name": "Adobo para Pizza", "cat": "09", "price": 1032.0, "old": null, "desde": true, "off": null, "img": "img/p5_04.jpg"}, {"name": "Cúrcuma", "cat": "09", "price": 1439.0, "old": null, "desde": true, "off": "13%", "img": "img/p5_05.jpg"}, {"name": "Pimienta Negra en Grano", "cat": "09", "price": 1350.0, "old": null, "desde": true, "off": "5%", "img": "img/p5_06.jpg"}, {"name": "Ají Molido", "cat": "09", "price": 985.0, "old": null, "desde": true, "off": null, "img": "img/p5_07.jpg"}, {"name": "Ajo en Polvo", "cat": "09", "price": 1126.0, "old": null, "desde": true, "off": null, "img": "img/p5_08.jpg"}, {"name": "Chimichurri", "cat": "09", "price": 1098.0, "old": null, "desde": true, "off": null, "img": "img/p5_09.jpg"}, {"name": "Ajo Molido en Granos", "cat": "09", "price": 1283.0, "old": null, "desde": true, "off": null, "img": "img/p5_10.jpg"}, {"name": "Comino", "cat": "09", "price": 1032.0, "old": null, "desde": true, "off": null, "img": "img/p5_11.jpg"}, {"name": "Pimienta negra Molida", "cat": "09", "price": 1582.0, "old": null, "desde": true, "off": "16%", "img": "img/p5_12.jpg"}, {"name": "Pimienta Blanca Molida", "cat": "09", "price": 1582.0, "old": null, "desde": true, "off": "9%", "img": "img/p5_13.jpg"}, {"name": "Laurel (Hojas)", "cat": "09", "price": 9167.0, "old": null, "desde": true, "off": null, "img": "img/p5_14.jpg"}, {"name": "Nuez Moscada (Polvo)", "cat": "09", "price": 1434.0, "old": null, "desde": true, "off": "13%", "img": "img/p5_15.jpg"}, {"name": "Provenzal", "cat": "09", "price": 1136.0, "old": null, "desde": true, "off": "8%", "img": "img/p5_16.jpg"}, {"name": "Pimentón Ahumado 1kg", "cat": "09", "price": 20964.0, "old": 22180.0, "desde": false, "off": "5%", "img": "img/p5_17.jpg"}, {"name": "Nuez Moscada (Enteras)", "cat": "09", "price": 1945.0, "old": null, "desde": true, "off": "12%", "img": "img/p5_18.jpg"}, {"name": "Bicarbonato 50g", "cat": "09", "price": 749.0, "old": null, "desde": true, "off": null, "img": "img/p5_19.jpg"}, {"name": "Peperina", "cat": "10", "price": 1752.0, "old": null, "desde": true, "off": null, "img": "img/p6_00.jpg"}, {"name": "Burrito", "cat": "10", "price": 1752.0, "old": null, "desde": true, "off": null, "img": "img/p6_01.jpg"}, {"name": "Cedrón", "cat": "10", "price": 1752.0, "old": null, "desde": true, "off": null, "img": "img/p6_02.jpg"}, {"name": "Cola de Caballo", "cat": "10", "price": 1752.0, "old": null, "desde": true, "off": null, "img": "img/p6_03.jpg"}, {"name": "Blend de Hierbas", "cat": "10", "price": 1752.0, "old": null, "desde": true, "off": null, "img": "img/p6_04.jpg"}, {"name": "Menta", "cat": "10", "price": 1752.0, "old": null, "desde": true, "off": null, "img": "img/p6_05.jpg"}, {"name": "Bolsa para Horno Limón y Oregano", "cat": "11", "price": 8752.0, "old": null, "desde": true, "off": "5%", "img": "img/p6_06.jpg"}, {"name": "Bolsa para Horno MOSTAZA, CEBOLLA Y AJO", "cat": "11", "price": 8752.0, "old": null, "desde": true, "off": "5%", "img": "img/p6_07.jpg"}, {"name": "Bolsa para Horno ALBAHACA, AJO Y ORÉGANO", "cat": "11", "price": 8752.0, "old": null, "desde": true, "off": "5%", "img": "img/p6_08.jpg"}, {"name": "Bolsa para Horno CAYENA, LIMÓN Y ORÉGANO", "cat": "11", "price": 8752.0, "old": null, "desde": true, "off": "5%", "img": "img/p6_09.jpg"}, {"name": "Bolsa para Horno ROMERO, TOMILLO Y ORÉGANO", "cat": "11", "price": 8752.0, "old": null, "desde": true, "off": "5%", "img": "img/p6_10.jpg"}, {"name": "Bolsa para Horno MIX 5 VARIEDADES", "cat": "11", "price": 6542.0, "old": null, "desde": false, "off": null, "img": "img/p6_11.jpg"}, {"name": "Maizena \"Mayana\" - 1 Kg", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_12.jpg"}, {"name": "Premezcla Bizcochuelo Vainilla \"DELICEL\" 500 Gr", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_13.jpg"}, {"name": "Premezcla Bizcochuelo Chocolate \"Delicel\" 500 Gr", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_14.jpg"}, {"name": "Premezcla para Pan \"Delicel\" 500 Gr", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_15.jpg"}, {"name": "Premezcla para Pizza \"Delicel\" 500 Gr", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_16.jpg"}, {"name": "Premezcla Universal \"Delicel\" 500 Gr", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_17.jpg"}, {"name": "Rebozador \"Delicel\" 500 Gr", "cat": "12", "price": 6612.0, "old": null, "desde": false, "off": null, "img": "img/p6_18.jpg"}, {"name": "PROMO 18 Unidades - Variedades", "cat": "12", "price": 37688.0, "old": null, "desde": true, "off": "15%", "img": "img/p6_19.jpg"}]};
+const WA="5491133992025";
+const COLORS={"01":"#c8553d","02":"#1f7a8c","03":"#c08a2a","04":"#6b8e23","05":"#7b4a2e","06":"#b5652b","07":"#b8322f","08":"#5b6b7d","09":"#d4722a","10":"#3e8e5a","11":"#8e4585","12":"#2d5da1"};
+const SHORT={"01":"Sales Gourmet","02":"Salados","03":"Regionales","04":"Potes 100 g","05":"Confitería y cereales","06":"Frutos secos y semillas","07":"Salsas y preparados","08":"Molinillos y recargas","09":"Condimentos","10":"Hierbas","11":"Bolsas para horno","12":"Seleccionados"};
+const STEPS=["Recibido","Confirmado","Preparando","En camino","Entregado"];
+const P=DATA.products.map((p,i)=>({...p,id:i}));
+const CATS=DATA.cats.map(([n,full])=>({n,full,name:SHORT[n]||full,c:COLORS[n]||"#888",items:P.filter(p=>p.cat===n)}));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>"$"+Math.round(n).toLocaleString("es-AR");
+const col=p=>COLORS[p.cat]||"#888";
+const mem={};
+const store={get(k,d){try{const v=localStorage.getItem("custom_"+k);return v?JSON.parse(v):d}catch(e){return k in mem?mem[k]:d}},set(k,v){mem[k]=v;try{localStorage.setItem("custom_"+k,JSON.stringify(v))}catch(e){}}};
+let cart=store.get("cart",{}), users=store.get("users",{}), orders=store.get("orders",[]), me=store.get("me",null);
+let curCat="all";
+const toast=t=>{const e=$("#toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)};
+const waLink=t=>"https://wa.me/"+WA+(t?"?text="+encodeURIComponent(t):"");
+$("#waHero").href=$("#waFoot").href=waLink("Hola Nicolás! Quiero hacer un pedido de Custom.");
+$("#stripes").innerHTML=Object.values(COLORS).map(c=>`<span style="background:${c}"></span>`).join("");
+$("#stCats").textContent=CATS.length;$("#stProds").textContent=P.length;
+
+/* hero shelf */
+const heroPick=[1,5,4,22,73];
+$("#shelf").innerHTML+=heroPick.map(i=>P[i]).filter(Boolean).map(p=>`<div class="jar"><img src="${esc(p.img)}" alt="">${esc(p.name.replace(/ - .*/,""))}</div>`).join("")+`<div class="tag">Hasta 25% off</div>`;
+
+/* categories */
+$("#cats").innerHTML=CATS.map(c=>{const min=Math.min(...c.items.map(p=>p.price));const cover=c.items.find(p=>!/Combo|PROMO/.test(p.name))||c.items[0];
+ return `<a class="cat" style="--c:${c.c}" href="#tienda" data-cat="${c.n}"><img src="${esc(cover.img)}" alt=""><span><b>${esc(c.name)}</b><small>${c.items.length} productos · desde <em>${money(min)}</em></small></span></a>`}).join("");
+$("#cats").addEventListener("click",e=>{const a=e.target.closest("[data-cat]");if(a){curCat=a.dataset.cat}});
+
+/* product card */
+const card=p=>{const q=cart[p.id]||0;
+ return `<article class="pc" style="--c:${col(p)}">${p.off?`<span class="off">-${esc(p.off)}</span>`:""}
+ <div class="ph"><img loading="lazy" src="${esc(p.img)}" alt=""></div>
+ <div class="bd"><span class="ct">${esc(SHORT[p.cat])}</span><span class="nm">${esc(p.name)}</span>
+ <div class="price">${p.desde?`<small>Desde</small>`:""}<b>${money(p.price)}</b>${p.old?`<s>${money(p.old)}</s>`:""}</div>
+ ${q?`<div class="qty"><button data-dec="${p.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-inc="${p.id}" aria-label="Agregar uno">+</button></div>`:`<button class="add" data-inc="${p.id}">Agregar</button>`}</div></article>`};
+
+const offers=P.filter(p=>p.off).sort((a,b)=>parseInt(b.off)-parseInt(a.off)).slice(0,14);
+const drawRail=()=>{$("#rail").innerHTML=offers.map(card).join("")};
+$("#rPrev").onclick=()=>$("#rail").scrollBy({left:-480,behavior:"smooth"});
+$("#rNext").onclick=()=>$("#rail").scrollBy({left:480,behavior:"smooth"});
+
+/* shop */
+const drawChips=()=>{$("#chips").innerHTML=[`<button data-c="all" class="${curCat==="all"?"on":""}">Todo</button>`,...CATS.map(c=>`<button data-c="${c.n}" class="${curCat===c.n?"on":""}">${esc(c.name)}</button>`)].join("")};
+$("#chips").onclick=e=>{const b=e.target.closest("[data-c]");if(!b)return;curCat=b.dataset.c;drawShop();b.scrollIntoView({inline:"center",block:"nearest"})};
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+const drawShop=()=>{drawChips();const q=norm($("#q").value.trim());let list=P.filter(p=>(curCat==="all"||p.cat===curCat)&&(!q||norm(p.name+" "+SHORT[p.cat]).includes(q)));
+ const s=$("#sort").value;if(s==="asc")list.sort((a,b)=>a.price-b.price);if(s==="desc")list.sort((a,b)=>b.price-a.price);if(s==="off")list.sort((a,b)=>(parseInt(b.off)||0)-(parseInt(a.off)||0));
+ $("#grid").innerHTML=list.length?list.map(card).join(""):`<p class="empty">No encontramos productos con esa búsqueda.</p>`;
+ const c=CATS.find(c=>c.n===curCat);$("#shopInfo").textContent=c?`${c.full} · ${list.length} productos`:`${list.length} productos · precios en pesos, vigentes al 03/11/2026.`};
+$("#q").oninput=drawShop;$("#sort").onchange=drawShop;
+
+/* cart */
+const saveCart=()=>{store.set("cart",cart);refresh()};
+const cartItems=()=>Object.entries(cart).filter(([,q])=>q>0).map(([id,q])=>({p:P[id],q})).filter(x=>x.p);
+const total=()=>cartItems().reduce((s,x)=>s+x.p.price*x.q,0);
+const salesCount=()=>cartItems().filter(x=>x.p.cat==="01"&&!/Himalaya|Combo/.test(x.p.name)).reduce((s,x)=>s+x.q,0);
+document.addEventListener("click",e=>{const i=e.target.closest("[data-inc]"),d=e.target.closest("[data-dec]");
+ if(i){const id=i.dataset.inc;cart[id]=(cart[id]||0)+1;saveCart();if(cart[id]===1)toast("Agregado: "+P[id].name)}
+ if(d){const id=d.dataset.dec;cart[id]=Math.max(0,(cart[id]||0)-1);if(!cart[id])delete cart[id];saveCart()}});
+const drawCart=()=>{const it=cartItems();const n=it.reduce((s,x)=>s+x.q,0);$("#cartCount").textContent=n;
+ $("#lines").innerHTML=it.length?it.map(({p,q})=>`<div class="ln"><img src="${esc(p.img)}" alt=""><div><div class="nm">${esc(p.name)}</div><div class="qty"><button data-dec="${p.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-inc="${p.id}" aria-label="Agregar uno">+</button></div></div><b>${money(p.price*q)}</b></div>`).join(""):`<p class="empty">Tu carrito está vacío.<br><a class="btn gold" href="#tienda" style="margin-top:14px">Ir a la tienda</a></p>`;
+ const sc=salesCount(),free=Math.floor(sc/10);
+ $("#df").innerHTML=it.length?`${free?`<div class="note">¡Sumaste ${sc} Sales Gourmet! Tenés ${free} de regalo: indicá cuál en las notas.</div>`:sc?`<div class="note">Llevás ${sc} Sales Gourmet. Con ${10-sc%10} más, una de regalo.</div>`:""}
+ <div class="tot"><span>Total estimado</span><b>${money(total())}</b></div><p class="small mute" style="margin:0">Los productos «Desde» se confirman según presentación.</p>
+ <a class="btn gold" href="#checkout">Finalizar pedido</a><button class="btn ghost" id="clr" style="color:var(--mute)">Vaciar carrito</button>`:"";
+ const c=$("#clr");if(c)c.onclick=()=>{cart={};saveCart()}};
+const openCart=o=>{$("#drawer").classList.toggle("open",o);$("#scrim").classList.toggle("open",o)};
+$("#cartBtn").onclick=()=>openCart(true);$("#closeCart").onclick=$("#scrim").onclick=()=>openCart(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")openCart(false)});
+
+/* checkout */
+const user=()=>me&&users[me];
+const fillCheckout=()=>{const u=user();if(u){$("#cName").value||=u.name||"";$("#cPhone").value||=u.phone||"";$("#cAddr").value||=u.addr||"";$("#cCity").value||=u.city||"";$("#coHint").textContent="Usamos los datos de tu cuenta. Podés cambiarlos para este pedido."}
+ else $("#coHint").innerHTML=`Podés comprar sin cuenta, o <a href="#cuenta">ingresar</a> para guardar tu historial.`;
+ const it=cartItems();$("#coSum").innerHTML=it.length?it.map(({p,q})=>`<div><span>${q} × ${esc(p.name)}</span><span>${money(p.price*q)}</span></div>`).join("")+`<hr style="border:0;border-top:1px solid var(--line);width:100%"><div style="font-size:18px"><b>Total estimado</b><b>${money(total())}</b></div>`:`<p class="mute">No hay productos. <a href="#tienda">Ir a la tienda</a></p>`};
+document.querySelectorAll("input[name=ship]").forEach(r=>r.onchange=()=>$("#addrBox").classList.toggle("hide",r.value!=="Envío a domicilio"||!r.checked));
+const newCode=()=>{let n=1040+orders.length+1;while(orders.some(o=>o.code==="CS-"+n))n++;return "CS-"+n};
+const waText=o=>`Hola Nicolás! Nuevo pedido ${o.code}\n`+o.items.map(x=>`• ${x.q} × ${x.name} (${money(x.price*x.q)})`).join("\n")+`\nTotal estimado: ${money(o.total)}\nNombre: ${o.name}\nEntrega: ${o.ship}${o.ship==="Envío a domicilio"?` · ${o.addr}, ${o.city}`:""}\nPago: ${o.pay}${o.note?`\nNotas: ${o.note}`:""}`;
+$("#coForm").onsubmit=e=>{e.preventDefault();const it=cartItems();const ship=document.querySelector("input[name=ship]:checked").value;
+ const f={name:$("#cName").value.trim(),phone:$("#cPhone").value.trim(),addr:$("#cAddr").value.trim(),city:$("#cCity").value.trim(),note:$("#cNote").value.trim()};
+ let err=!it.length?"El carrito está vacío.":!f.name?"Falta tu nombre.":f.phone.replace(/\D/g,"").length<8?"Revisá el número de WhatsApp.":ship==="Envío a domicilio"&&(!f.addr||!f.city)?"Falta la dirección de entrega.":"";
+ $("#coErr").textContent=err;if(err)return;
+ const o={code:newCode(),date:new Date().toISOString(),user:me,...f,ship,pay:document.querySelector("input[name=pay]:checked").value,items:it.map(({p,q})=>({id:p.id,name:p.name,price:p.price,q,img:p.img})),total:total(),step:0};
+ orders.unshift(o);store.set("orders",orders);
+ const u=user();if(u&&!u.addr){Object.assign(u,{addr:f.addr,city:f.city,phone:u.phone||f.phone});store.set("users",users)}
+ cart={};saveCart();$("#cNote").value="";
+ $("#okBox").innerHTML=`<h2>¡Pedido registrado!</h2><p class="mute" style="margin:0">Tu código de seguimiento es</p><div class="code">${esc(o.code)}</div>
+ <p style="margin:0">Para que Nicolás lo reciba, envialo por WhatsApp con el botón de abajo (ya va armado con el detalle).</p>
+ <a class="btn wa" href="${waLink(waText(o))}">Enviar pedido por WhatsApp</a><p class="small mute" style="margin:0">WhatsApp +54 9 11 3399-2025</p>
+ <div class="acts"><a class="btn ghost" href="#seguimiento" data-trk="${esc(o.code)}">Ver seguimiento</a>${me?`<a class="btn ghost" href="#cuenta">Mis pedidos</a>`:""}</div>`;
+ location.hash="listo"};
+
+/* orders render */
+const fmtDate=d=>new Date(d).toLocaleDateString("es-AR",{day:"numeric",month:"short",year:"numeric"});
+const trackHTML=o=>`<div class="track">${STEPS.map((s,i)=>`<div class="${i<o.step?"done":i===o.step?"cur done":""}"><i>${i<o.step?"✓":i+1}</i>${s}</div>`).join("")}</div>`;
+const orderHTML=(o,opts={})=>`<div class="order"><div class="ohd"><b>${esc(o.code)}</b><span class="pill">${STEPS[o.step]}</span></div>
+ <div class="small mute">${fmtDate(o.date)} · ${o.items.reduce((s,x)=>s+x.q,0)} productos · ${esc(o.ship)} · <b style="color:var(--ink)">${money(o.total)}</b></div>
+ <div class="thumbs">${o.items.slice(0,8).map(x=>`<img src="${esc(x.img)}" alt="${esc(x.name)}" title="${esc(x.q+" × "+x.name)}">`).join("")}${o.items.length>8?`<span class="pill">+${o.items.length-8}</span>`:""}</div>
+ ${trackHTML(o)}
+ ${opts.repeat?`<div class="acts"><button class="btn gold" data-rep="${esc(o.code)}">Repetir pedido</button><a class="btn ghost" href="${waLink("Hola! Consulta por mi pedido "+o.code)}">Consultar</a></div>`:""}
+ ${opts.admin?`<div class="acts"><label class="small" style="display:flex;gap:8px;align-items:center">Estado <select class="inp" data-st="${esc(o.code)}" style="width:auto">${STEPS.map((s,i)=>`<option value="${i}" ${i===o.step?"selected":""}>${s}</option>`).join("")}</select></label><a class="btn wa" href="${waLink("")}" data-wa="${esc(o.phone)}" data-code="${esc(o.code)}">Avisar al cliente</a></div><div class="small mute">${esc(o.name)} · ${esc(o.phone)}${o.addr?" · "+esc(o.addr+", "+o.city):""} · ${esc(o.pay)}${o.note?" · "+esc(o.note):""}</div>`:""}</div>`;
+document.addEventListener("click",e=>{const r=e.target.closest("[data-rep]");if(r){const o=orders.find(o=>o.code===r.dataset.rep);if(!o)return;let miss=0;o.items.forEach(x=>{if(P[x.id]&&P[x.id].name===x.name)cart[x.id]=(cart[x.id]||0)+x.q;else miss++});saveCart();toast(miss?`Agregado. ${miss} producto(s) ya no están disponibles.`:"Pedido cargado en el carrito, con precios actuales.");openCart(true)}
+ const t=e.target.closest("[data-trk]");if(t)setTimeout(()=>{$("#trkQ").value=t.dataset.trk;track()},0)});
+
+/* account */
+const authMode=()=>document.querySelector("input[name=am]:checked").value;
+document.querySelectorAll("input[name=am]").forEach(r=>r.onchange=()=>{const up=authMode()==="up";document.querySelectorAll(".upOnly").forEach(x=>x.classList.toggle("hide",!up));$("#aBtn").textContent=up?"Crear cuenta":"Ingresar";$("#aErr").textContent=""});
+const hash=s=>{let h=5381;for(const c of s)h=(h*33)^c.charCodeAt(0);return (h>>>0).toString(36)};
+const login=m=>{me=m;store.set("me",me);refresh();toast("¡Hola, "+(users[m].name||"").split(" ")[0]+"!")};
+$("#authForm").onsubmit=e=>{e.preventDefault();const m=$("#aMail").value.trim().toLowerCase(),pw=$("#aPass").value;let err="";
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))err="Ingresá un email válido.";else if(pw.length<6)err="La contraseña debe tener al menos 6 caracteres.";
+ else if(authMode()==="up"){if(users[m])err="Ya existe una cuenta con ese email.";else if(!$("#aName").value.trim())err="Falta tu nombre.";else{users[m]={name:$("#aName").value.trim(),phone:$("#aPhone").value.trim(),pw:hash(pw)};store.set("users",users);login(m)}}
+ else{if(!users[m]||users[m].pw!==hash(pw))err="Email o contraseña incorrectos.";else login(m)}
+ $("#aErr").textContent=err};
+$("#demoBtn").onclick=()=>{const m="cliente.demo@ejemplo.com";if(!users[m]){users[m]={name:"Laura Gómez",phone:"11 5555-0101",addr:"Av. Rivadavia 4500",city:"CABA",pw:hash("demo1234")};store.set("users",users);
+ const mk=(code,days,step,ids)=>({code,date:new Date(Date.now()-days*864e5).toISOString(),user:m,name:"Laura Gómez",phone:"11 5555-0101",addr:"Av. Rivadavia 4500",city:"CABA",ship:"Envío a domicilio",pay:"Transferencia",note:"",items:ids.map(([id,q])=>({id,name:P[id].name,price:P[id].price,q,img:P[id].img})),step});
+ const a=mk("CS-1001",34,4,[[1,2],[5,1],[72,2],[62,1],[100,1]]),b=mk("CS-1002",3,3,[[1,1],[59,1],[73,1],[83,2]]);a.total=a.items.reduce((s,x)=>s+x.price*x.q,0);b.total=b.items.reduce((s,x)=>s+x.price*x.q,0);
+ orders.push(b,a);store.set("orders",orders)}login(m)};
+$("#logout").onclick=()=>{me=null;store.set("me",null);refresh()};
+$("#profForm").onsubmit=e=>{e.preventDefault();const u=user();if(!u)return;Object.assign(u,{name:$("#pName").value.trim(),phone:$("#pPhone").value.trim(),addr:$("#pAddr").value.trim(),city:$("#pCity").value.trim()});store.set("users",users);refresh();toast("Datos guardados")};
+const drawAccount=()=>{const u=user();$("#authBox").classList.toggle("hide",!!u);$("#accBox").classList.toggle("hide",!u);$("#navacc").textContent=u?"Mi cuenta":"Ingresar";if(!u)return;
+ $("#hello").textContent="Hola, "+u.name.split(" ")[0];$("#accMail").textContent=me;
+ $("#pName").value=u.name||"";$("#pPhone").value=u.phone||"";$("#pAddr").value=u.addr||"";$("#pCity").value=u.city||"";
+ const mine=orders.filter(o=>o.user===me);
+ $("#myOrders").innerHTML=mine.length?mine.map(o=>orderHTML(o,{repeat:true})).join("")+(me==="cliente.demo@ejemplo.com"?`<p class="demo">Cliente y pedidos de ejemplo.</p>`:""):`<div class="panel empty">Todavía no hiciste pedidos.<br><a class="btn gold" href="#tienda" style="margin-top:14px">Ir a la tienda</a></div>`};
+
+/* tracking */
+const track=()=>{const q=$("#trkQ").value.trim().toUpperCase().replace(/^(\d)/,"CS-$1");const o=orders.find(o=>o.code===q);
+ $("#trkOut").innerHTML=!q?"":o?orderHTML(o):`<div class="panel empty">No encontramos el pedido ${esc(q)}. Revisá el código o <a href="${waLink("Hola! Consulto por mi pedido "+q)}">escribinos por WhatsApp</a>.</div>`};
+$("#trkForm").onsubmit=e=>{e.preventDefault();track()};
+
+/* admin */
+const drawAdmin=()=>{$("#adm").innerHTML=orders.length?orders.map(o=>orderHTML(o,{admin:true})).join(""):`<div class="panel empty">Todavía no hay pedidos. Hacé uno de prueba desde la tienda.</div>`;
+ document.querySelectorAll("[data-wa]").forEach(a=>{const o=orders.find(o=>o.code===a.dataset.code);const ph=a.dataset.wa.replace(/\D/g,"");a.href="https://wa.me/"+(ph.length===10?"549"+ph:ph)+"?text="+encodeURIComponent(`Hola ${o.name.split(" ")[0]}! Tu pedido ${o.code} está: ${STEPS[o.step]}. Gracias por comprar en Custom.`)})};
+$("#adm").addEventListener("change",e=>{const s=e.target.closest("[data-st]");if(!s)return;const o=orders.find(o=>o.code===s.dataset.st);o.step=+s.value;store.set("orders",orders);drawAdmin();toast(o.code+": "+STEPS[o.step])});
+
+/* router */
+const VIEWS=["inicio","tienda","checkout","listo","cuenta","seguimiento","panel"];
+const refresh=()=>{drawCart();drawRail();if(!$("#v-tienda").classList.contains("hide"))drawShop();drawAccount();if(!$("#v-checkout").classList.contains("hide"))fillCheckout();if(!$("#v-panel").classList.contains("hide"))drawAdmin()};
+const route=()=>{let v=location.hash.slice(1);if(!VIEWS.includes(v))v="inicio";if(v==="listo"&&!$("#okBox").innerHTML)v="inicio";
+ VIEWS.forEach(n=>$("#v-"+n).classList.toggle("hide",n!==v));
+ document.querySelectorAll("#topnav a,#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+v));
+ openCart(false);if(v==="tienda")drawShop();if(v==="checkout")fillCheckout();if(v==="panel")drawAdmin();if(v==="cuenta")drawAccount();
+ window.scrollTo(0,0)};
+window.addEventListener("hashchange",route);
+refresh();route();
+}
+</script>
+</body>
+</html>
